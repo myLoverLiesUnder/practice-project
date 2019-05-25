@@ -1,25 +1,54 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <div>
         <h1>list</h1>
         <v-btn fab dark color="indigo" @click="create()">
             <v-icon dark>add</v-icon>
         </v-btn>
-        <Rat :siteSection="siteSection" :pageName="pageName" :ratCustomParams="ratCustomParams"></Rat>
+        <v-menu
+                ref="menu"
+                v-model="menu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+        >
+            <template v-slot:activator="{ on }">
+                <v-text-field
+                        v-model="date"
+                        label="Birthday date"
+                        prepend-icon="event"
+                        readonly
+                        v-on="on"
+                ></v-text-field>
+            </template>
+            <v-date-picker
+                    ref="picker"
+                    v-model="date"
+                    :max="new Date().toISOString().substr(0, 10)"
+                    min="1950-01-01"
+                    @change="save"
+                    no-title
+            ></v-date-picker>
+        </v-menu>
     </div>
 </template>
 
 <script>
-    import Rat from '@/pages/layout/Rat'
-    import { trackClick } from "../../libs/ratUtils";
-
+    /* eslint-disable */
     export default {
         name: "list",
-        components: { Rat },
         data() {
             return {
-                siteSection: "EXAMPLE_LIST",
-                pageName: "listPage",
-                ratCustomParams: {}
+                date: null,
+                menu: false
+            }
+        },
+        watch: {
+            menu(val) {
+                val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
             }
         },
         methods: {
@@ -28,7 +57,11 @@
                 let ratCustomParams = { a: '123' };
                 this.$store.commit('changeRatCustomParams', ratCustomParams);
                 this.$router.push('/example/create');
-                trackClick("go_to_create", ratCustomParams);
+            },
+            save(date) {
+                this.$refs.menu.save(date)
+                this.$refs.picker.activePicker = 'YEAR'
+                this.menu = false;
             }
         }
     }

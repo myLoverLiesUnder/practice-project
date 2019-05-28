@@ -1,39 +1,34 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-    <div>
-        <h1>list</h1>
-        <v-btn fab dark color="indigo" @click="create()">
-            <v-icon dark>add</v-icon>
-        </v-btn>
-        <v-menu
-                ref="menu"
-                v-model="menu"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                lazy
-                transition="scale-transition"
-                offset-y
-                full-width
-                min-width="290px"
-        >
-            <template v-slot:activator="{ on }">
-                <v-text-field
-                        v-model="date"
-                        label="Birthday date"
-                        prepend-icon="event"
-                        readonly
-                        v-on="on"
-                ></v-text-field>
-            </template>
-            <v-date-picker
-                    ref="picker"
-                    v-model="date"
-                    :max="new Date().toISOString().substr(0, 10)"
-                    min="1950-01-01"
-                    @change="save"
-                    no-title
-            ></v-date-picker>
-        </v-menu>
-    </div>
+    <v-container grid-list-md text-xs-center>
+        <v-layout row wrap>
+            <v-flex xs4>
+                <v-card>
+                    <v-img
+                            src="https://cdn.vuetifyjs.com/images/cards/desert.jpg"
+                            aspect-ratio="2.75"
+                    ></v-img>
+
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline mb-0">Kangaroo Valley Safari</h3>
+                        </div>
+                    </v-card-title>
+
+                    <v-card-actions>
+                        <v-btn flat color="orange">Share</v-btn>
+                        <v-btn flat color="orange">Explore</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-flex>
+            <v-flex xs4>
+                <div class="addArea">
+                    <i class="material-icons">
+                        add
+                    </i>
+                </div>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>
@@ -68,5 +63,19 @@
 </script>
 
 <style scoped>
+    .addArea {
+        border: 3px dashed darkgray;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .addArea > i {
+        font-size: 40px;
+        position: absolute;
+        top: calc((100% - 40px) / 2);
+        right: calc((100% - 40px) / 2);
+    }
 
 </style>

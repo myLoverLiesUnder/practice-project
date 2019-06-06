@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <form>
         <v-select
                 v-model="selectData.select"
@@ -6,6 +6,42 @@
                 :rules="[v => !!v || 'Item is required']"
                 label="Item"
         ></v-select>
+        <v-dialog v-model="dialog" scrollable width="600px">
+            <template v-slot:activator="{ on }">
+                <v-text-field
+                        v-on="on"
+                        v-model="selectData.model"
+                        label="Modal"
+                        required
+                ></v-text-field>
+            </template>
+            <v-card>
+                <v-card-title>Select Country</v-card-title>
+                <v-divider></v-divider>
+                <v-text-field
+                        v-model="search"
+                        label="Search Country"
+                        flat
+                        solo-inverted
+                        clearable
+                ></v-text-field>
+                <v-card-text style="height: 300px;">
+                    <v-radio-group v-model="dialogm1" column>
+                        <v-radio label="Bahamas, The" value="bahamas"></v-radio>
+                        <v-radio label="Bahrain" value="bahrain"></v-radio>
+                        <v-radio label="Bangladesh" value="bangladesh"></v-radio>
+                        <v-radio label="Barbados" value="barbados"></v-radio>
+                        <v-radio label="Belarus" value="belarus"></v-radio>
+                        <v-radio label="Belgium" value="belgium"></v-radio>
+                    </v-radio-group>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="green darken-1" flat @click="dialog = false">Close</v-btn>
+                    <v-btn color="green darken-1" flat @click="modalSave">Save</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </form>
 </template>
 
@@ -14,8 +50,12 @@
     export default {
         name: "selectForm",
         data: () => ({
+            dialog: false,
+            dialogm1: '',
+            search: null,
             selectData: {
-                select: ''
+                select: '',
+                model: ''
             },
             items: [
                 'Item 1',
@@ -30,6 +70,12 @@
                     this.$emit('selectFormData', val)
                 },
                 deep: true
+            }
+        },
+        methods: {
+            modalSave: function () {
+                this.selectData.model = this.dialogm1;
+                this.dialog = false
             }
         }
     }

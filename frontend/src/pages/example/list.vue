@@ -21,7 +21,7 @@
                 </v-card>
             </v-flex>
             <v-flex xs4>
-                <div class="addArea">
+                <div class="addArea" @click="create">
                     <i class="material-icons">
                         add
                     </i>

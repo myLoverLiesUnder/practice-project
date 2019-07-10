@@ -42,6 +42,20 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+        <v-combobox
+                @click="getData"
+                v-model="select"
+                :loading="loading"
+                :items="autoItems"
+                item-text="Description"
+                item-value="API"
+                return-object
+                hide-no-data
+                hide-selected
+                cache-items
+                :value-comparator="check"
+                label="First"
+        ></v-combobox>
     </form>
 </template>
 
@@ -63,6 +77,11 @@
                 'Item 3',
                 'Item 4'
             ],
+            loading: false,
+            autoItems: [],
+            select: null,
+            select2: null,
+            loading2: false,
         }),
         watch: {
             'selectData': {
@@ -73,9 +92,27 @@
             }
         },
         methods: {
+            check: function () {
+                console.log(this.select)
+                return this.autoItems.includes(this.select)
+            },
             modalSave: function () {
                 this.selectData.model = this.dialogm1;
                 this.dialog = false
+            },
+            getData: function () {
+                if (this.autoItems.length > 0) return;
+                this.loading = true;
+                fetch('https://api.publicapis.org/entries')
+                    .then(res => res.json())
+                    .then(res => {
+                        const { entries } = res;
+                        this.autoItems = entries;
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                    .finally(() => (this.loading = false))
             }
         }
     }
